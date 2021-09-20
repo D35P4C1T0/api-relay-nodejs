@@ -13,14 +13,18 @@ const fetchJson = async () => {
   }
 }
 
-const sendJson = async (req) => {
-  const url = process.env.BIN_URL
-  console.log(req.body)
+const updateContent = async (req) => {
+  const url = process.env["BIN_URL"]
+  console.log(req.body.scan)
   try {
+    let commands = [{ op: "add", path: "/records/-", value: req.body.scan }]
     const stream = await fetch(url, {
-      method: "PUT",
-      headers: { "Security-key": process.env.BIN_SECURE_KEY },
-      body: JSON.stringify(req.body),
+      method: "PATCH",
+      headers: {
+        "Security-key": process.env["BIN_SECURE_KEY"],
+        "Content-type": "application/json-patch+json",
+      },
+      body: JSON.stringify(commands),
     })
     const streamJson = await stream.json()
     return streamJson
@@ -29,13 +33,13 @@ const sendJson = async (req) => {
   }
 }
 
-router.get("/", async (req, res) => {
-  const data = await fetchJson()
-  res.json(data)
-})
+// router.get("/", async (req, res) => {
+//   const data = await fetchJson()
+//   res.json(data)
+// })
 
 router.post("/", async (req, res) => {
-  const response = await sendJson(req)
+  const response = await updateContent(req)
   res.json(response)
 })
 

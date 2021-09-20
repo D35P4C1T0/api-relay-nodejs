@@ -5,26 +5,32 @@ import cors from "cors"
 dotenv.config()
 const app = express()
 
-const port = 3000
+const port = 6660
 
 import jsonstore from "./jsonstore/index.js"
 
 app.use(express.json())
 
 // const whitelist = ["http://127.0.0.1"]
-const whitelist = [process.env.BACKEND_URL]
-const corsOption = {
-  origin: (origin, callback) => {
-    if (!origin || whitelist.indexOf(origin !== -1)) {
-      callback(null, true)
-    } else {
-      callback(new Error("Not allowed by CORS"))
-    }
-  },
-  optionsSuccessStatus: 200,
-}
+// const whitelist = [process.env.BACKEND_URL]
 
-app.use(cors(corsOption))
+// const frontendUrl = process.env["FRONTEND_URL"]
+// console.log(frontendUrl)
+
+// const corsOption = {
+//   origin: (origin, callback) => {
+//     if (!origin || whitelist.indexOf(origin !== -1)) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error("Not allowed by CORS"))
+//     }
+//   },
+//   optionsSuccessStatus: 200,
+// }
+
+// app.use(cors(corsOption))
+
+app.use(cors())
 
 app.get("/", (req, res) => res.json({ success: "Hello World" }))
 
